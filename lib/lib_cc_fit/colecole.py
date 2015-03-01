@@ -17,48 +17,56 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import numpy as np
 """
+import numpy as np
 
 
 def cole_real(frequencies, params):
-    data_complex = cole_complex(frequencies[0:frequencies.shape[0]/2],
+    data_complex = cole_complex(frequencies[0:frequencies.shape[0] / 2],
                                 params)
-    data_real = np.real(data_complex);
-    data_imag = np.imag(data_complex);
+    data_real = np.real(data_complex)
+    data_imag = np.imag(data_complex)
 
     mag = np.abs(data_complex)
     # phases, [mrad]
     pha = 1000 * np.arctan(data_imag/data_real)
-    data_all = np.hstack((np.log(mag), pha));
+    data_all = np.hstack((np.log(mag), pha))
     return data_all
+
 
 def cole_complex(frequencies, params):
      # determine number of Cole-Cole terms
     nr_cc_terms = (len(params) - 1) / 3;
 
     # extract the Cole-Cole parameters
-    rho0 = np.exp(params[0]);  # DC resistance
-    m = params[1:len(params):3] # chargeability
-    tau = np.exp(params[2:len(params):3]); #time constant
-    c = params[3:len(params):3]; # cementation exponent
+    # DC resistance/resistivity
+    rho0 = np.exp(params[0])
+    # chargeability
+    m = params[1:len(params):3]
+    # relaxation time
+    tau = np.exp(params[2:len(params):3])
+    # cementation exponent
+    c = params[3:len(params):3]
 
     # extract frequencies
     f = frequencies
 
     # prepare temporary array which will store the values of all CC-terms,
     # which later will be summed up
-    term = np.zeros((f.shape[0], nr_cc_terms), dtype=np.complex128 )
+    term = np.zeros((f.shape[0], nr_cc_terms), dtype=np.complex128)
 
     # compute Cole-Cole function, each term separately
     for k in range(0, nr_cc_terms):
-        term[:,k] =  (m[k]) * ( 1 - 1 / (1 + ((0+1j) * 2 * np.pi * f * tau[k]) ** c[k]))
+        term[:, k] = (m[k]) * (
+            1 - 1 / (1 + ((0 + 1j) * 2 * np.pi * f * tau[k]) ** c[k]))
 
     # sum up
-    term_g = np.sum(term, 1);
+    term_g = np.sum(term, 1)
 
     # multiply rho0
-    Zfit = rho0 * (1  - term_g)
+    Zfit = rho0 * (1 - term_g)
 
     return Zfit
+
 
 def cole_log(inputdata, params):
 
@@ -132,6 +140,7 @@ def cole_log(inputdata, params):
     fitdata = np.vstack((np.log(rhofit), phifit));
     return fitdata
 
+
 def cc_jac(f, par):
     """
     Wrapper for cc_jac_real which takes a frequency array as large as the
@@ -140,21 +149,24 @@ def cc_jac(f, par):
     f_red = f[f.shape[0] / 2:]
     return cc_jac_real(f_red, par)
 
+
 def cc_jac_real(f_red, par):
     """
     d rho^hat/d |R|
     """
-    ret = np.vstack((cc_der_lnR(f_red, par), cc_der_phi(f_red,par)))
+    ret = np.vstack((cc_der_lnR(f_red, par), cc_der_phi(f_red, par)))
     return ret
+
 
 def cc_der_phi(f, par):
     rho = cole_complex(f, par)
 
-    term2 = cc_drhodx_complex(f, par) / np.vstack((rho,rho,rho,rho)).T
+    term2 = cc_drhodx_complex(f, par) / np.vstack((rho, rho, rho, rho)).T
 
     ret = 1j * (cc_der_lnR(f, par) - term2)
     ret = np.real(ret)
     return ret
+
 
 def cc_drhodx_complex(f_red, par):
     der_lnrho0 = cc_der_lnrho(f_red, par)
@@ -164,6 +176,7 @@ def cc_drhodx_complex(f_red, par):
 
     jac_complex = np.vstack((der_lnrho0, der_m, der_lntau, der_c))
     return jac_complex.T
+
 
 def cc_der_lnR(f, par):
     rho = cole_complex(f, par)

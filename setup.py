@@ -15,6 +15,7 @@ if __name__ == '__main__':
           version=version_long,
           description='Cole-Cole fit routines',
           author='Maximilian Weigand',
+          license='GPL-3',
           author_email='mweigand@geo.uni-bonn.de',
           url='http://www.geo.uni-bonn.de/~mweigand',
           # find_packages() somehow does not work under Win7 when creating a
@@ -23,5 +24,5 @@ if __name__ == '__main__':
           package_dir={'': 'lib'},
           packages=['lib_cc_fit', ],
           scripts=['src/cc_fit.py', ],
-          install_requires=['numpy', 'scipy', 'matplotlib']
+          install_requires=['numpy', 'scipy', 'matplotlib'],
           )

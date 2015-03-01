@@ -1,0 +1,3 @@
+recursive-include doc/_build/html *
+recursive-include examples *
+recursive-include tests *

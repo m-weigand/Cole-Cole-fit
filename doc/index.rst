@@ -254,6 +254,25 @@ suggestions regarding this documentation are necessary, including
 
 Please use the github page to submits feedback, bug reports, or pull requests.
 
+Roadmap
+-------
+
+* Sort results (low-frequency, high-value, relaxation times should come first).
+  See 2-term tests why we need this.
+* Cleanup lib_cc_fit.cc_fit.py (pep8)
+* Fitting in real and imaginary parts simplifies some things, and should
+  provide more stable results. In addition, we then could use some of the
+  experience we gathered with the Debye decomposition routines.
+* Re-add the use of multiple processors when fitting multiple spectra
+* Implement conductivity formulation as described by Tarasov and Titov
+* Use `geccoinv` for the inversion (this is the inversion framework we use for
+  the Debye decomosition, including time-lapse inversion schemes)
+* Re-add the possibility to use the fit result of the previous spectrum as the
+  initial value for the next. This is really helpful when fitting spectra
+  recovered from imaging results, which usually change only gradually.
+* Use a bounded (contrained) least squares implementation, e.g.
+  https://github.com/jjhelmus/leastsqbound-scipy/tree/master
+
 Licence
 -------
 
@@ -274,23 +293,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Roadmap
--------
-
-* Cleanup lib_cc_fit.cc_fit.py (pep8)
-* Fitting in real and imaginary parts simplifies some things, and should
-  provide more stable results. In addition, we then could use some of the
-  experience we gathered with the Debye decomposition routines.
-* Re-add the use of multiple processors when fitting multiple spectra
-* Implement conductivity formulation as described by Tarasov and Titov
-* Use `geccoinv` for the inversion (this is the inversion framework we use for
-  the Debye decomosition, including time-lapse inversion schemes)
-* Re-add the possibility to use the fit result of the previous spectrum as the
-  initial value for the next. This is really helpful when fitting spectra
-  recovered from imaging results, which usually change only gradually.
-* Use a bounded (contrained) least squares implementation, e.g.
-  https://github.com/jjhelmus/leastsqbound-scipy/tree/master
 
 Indices and tables
 ==================

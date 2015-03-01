@@ -41,7 +41,7 @@ def _get_cc_dirs(testdir):
 def plot_residuals(directory):
     residuals = []
     for directory in _get_cc_dirs(directory):
-        residual_file = directory + os.sep + 'residuals.dat'
+        residual_file = directory + os.sep + 'results/residuals.dat'
         residuals.append(np.loadtxt(residual_file))
     all_residuals = np.array(residuals)
     nr_f = all_residuals.shape[1] / 2
@@ -72,7 +72,7 @@ def plot_result_diffs(testdir):
     cc_fit_residuals = []
     for directory in _get_cc_dirs(testdir):
         cc_orig = directory + os.sep + 'colecole_orig.dat'
-        cc_fit = directory + os.sep + 'cc_fits.dat'
+        cc_fit = directory + os.sep + 'results/cc_fits.dat'
         cc_fit_residuals.append(np.loadtxt(cc_fit) - np.loadtxt(cc_orig))
     all_cc_fit_residuals = np.array(cc_fit_residuals)
 
