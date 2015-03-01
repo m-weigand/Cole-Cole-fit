@@ -25,5 +25,5 @@ References:
   discrimination and removal of inductive coupling with multifrequency ip.
   Geophysics 43 (3), 588–609.
 
-.. image:: static//spectrum_01.png
+![Example fit](static/spectrum_01.png)
 
