@@ -1,0 +1,9 @@
+*.png
+fit_results.dat
+fit_results_mean.dat
+cc_fits.dat
+cc_fits.dat.err
+mdevrho0.dat
+fit_results.dat.err
+*.err
+Dataset_00/fits_normal.dat
