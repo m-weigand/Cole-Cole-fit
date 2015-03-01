@@ -278,6 +278,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Roadmap
 -------
 
+* Cleanup lib_cc_fit.cc_fit.py (pep8)
 * Fitting in real and imaginary parts simplifies some things, and should
   provide more stable results. In addition, we then could use some of the
   experience we gathered with the Debye decomposition routines.
