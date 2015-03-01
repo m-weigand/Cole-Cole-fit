@@ -5,10 +5,7 @@ This python package provides a command line interface to fit complex
 resistivity/resistance data using the Cole-Cole model (Cole and Cole, 1941),
 including multiple additive terms:
 
-.. math::
-
-    \hat{\rho}(\omega) = \rho_0 \left[ 1 - \sum_{i=1}^M m_i \left( 1 -
-    \frac{1}{1 + (i \omega \tau_i)^c_i} \right) \right]
+![](static/cc_equation.png)
 
 This resitivity formulation is based on Pelton et. al. 1978. The fit is
 conducted using a non-linear least squares algorithm implemented in the scipy
