@@ -24,3 +24,8 @@ References:
 
 ![Example fit](static/spectrum_01.png)
 
+Installation/Documentation
+--------------------------
+
+Please refer to the documentation in the ``doc/`` subdirectory (composed using
+sphinx).
