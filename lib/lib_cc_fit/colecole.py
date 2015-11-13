@@ -90,7 +90,7 @@ def cole_log(inputdata, params):
                   in mRad
     """
      # determine number of Cole-Cole terms
-    nr_cc_terms = (len(params) - 1) / 3;
+    nr_cc_terms = int((len(params) - 1) / 3)
 
     # extract the Cole-Cole parameters
     rho0 = np.exp(params[0]);  # DC resistance
