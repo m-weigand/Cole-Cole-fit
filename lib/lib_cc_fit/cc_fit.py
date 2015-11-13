@@ -24,7 +24,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 plt.ioff()
 from scipy.optimize import leastsq
-import colecole
+import lib_cc_fit.colecole as colecole
 
 
 class cc_fit:
@@ -195,13 +195,13 @@ class cc_fit:
         p0[0] = spectrum[0]
 
         # c
-        c_indices = [i * 3 + 3 for i in xrange(self.nr_cc_terms)]
+        c_indices = [i * 3 + 3 for i in range(self.nr_cc_terms)]
         p0[c_indices] = 0.5
         # tau
         tau_min = 1.0 / (2 * np.pi * self.frequencies.max())
         tau_max = 1.0 / (2 * np.pi * self.frequencies.min())
 
-        tau_indices = [i * 3 + 2 for i in xrange(self.nr_cc_terms)]
+        tau_indices = [i * 3 + 2 for i in range(self.nr_cc_terms)]
         # log-space sampling of tau range
         # use 2 more tau values for the boundaries:
         # we do not want to set an initial tau value to one the frequency
@@ -214,7 +214,7 @@ class cc_fit:
         # m
         # m is selected by testing m values within a certain value range for
         # the smallest phase rms
-        m_indices = [i * 3 + 1 for i in xrange(self.nr_cc_terms)]
+        m_indices = [i * 3 + 1 for i in range(self.nr_cc_terms)]
         test_m_values = np.linspace(0.05, 0.9, 10)
         best_index = -1
         best_rms = np.inf
@@ -334,8 +334,8 @@ class cc_fit:
                 for i, pmin in enumerate(plsq):
                     print('{0:02} {1:.10} +/- {2:.10} ({3:.10}%)'.format(
                         i, pmin, errors[i], errors[i] / pmin * 100))
-                print
-                print "Correlation matrix"
+                print('')
+                print("Correlation matrix")
                 for i in range(len(plsq)):
                     for j in range(i + 1):
                         print('{0}'.format(
@@ -543,7 +543,7 @@ class cc_fit:
 
         # generate forward response for each CC term
         forward_cc_terms = []
-        for i in range(0, (len(self.cc_pars[id]) - 1) / 3):
+        for i in range(0, self.nr_cc_terms):
             oneterm_cc = [0, (i * 3) + 1, (i * 3) + 2, (i * 3) + 3]
             forward_cc_terms.append(
                 colecole.cole_log(fin_e, self.cc_pars[id][oneterm_cc]))
