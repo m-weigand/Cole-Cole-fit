@@ -75,9 +75,9 @@ The following input files are recognized:
   frequency per line (command line switch ``-f / --frequency_file``).
 * `data.dat` contains the data (complex resistivity/resistance spectra), one
   spectrum per line. Columns are separated by spaces or tabs. The first N
-  columns contain the linear magnitudes of each spectrum, corresponding to the
+  columns contain the linear magnitudes (Ohm or Ohm m) of each spectrum, corresponding to the
   frequencies in the `frequencies.dat` file. The columns N+1 to 2N contain the
-  phase values of the spectrum (comand line switch ``-d / --data_file``).
+  phase values (in mrad) of the spectrum (comand line switch ``-d / --data_file``).
 
   .. note::
 
