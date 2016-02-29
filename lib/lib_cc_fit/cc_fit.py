@@ -188,7 +188,6 @@ class cc_fit:
               the frequency range.
             - c is set to 0.5
         """
-        print('Heuristic 2')
         nr_cc_pars = 1 + 3 * self.nr_cc_terms
         p0 = np.zeros((1, nr_cc_pars)).flatten()
         # rho0
@@ -471,8 +470,43 @@ class cc_fit:
 
     def save_mean_of_cc_pars(self, filename):
         self.cc_pars_mean = np.mean(self.cc_pars, axis=0)[np.newaxis, :]
-        # compute mean error
 
+        mag_residuals = self.residuals[:, 0:self.frequencies.size]
+        pha_residuals = self.residuals[:, self.frequencies.size:]
+
+        mag_res_stats = np.vstack((
+            np.min(mag_residuals, axis=0),
+            np.max(mag_residuals, axis=0),
+            np.mean(mag_residuals, axis=0),
+            np.std(mag_residuals, axis=0),
+        )).T
+
+        pha_res_stats = np.vstack((
+            np.min(pha_residuals, axis=0),
+            np.max(pha_residuals, axis=0),
+            np.mean(pha_residuals, axis=0),
+            np.std(pha_residuals, axis=0),
+        )).T
+
+        with open(filename[:-4] + '_residual_stats_mag.dat', 'w') as fid:
+            np.savetxt(fid, mag_res_stats)
+
+        with open(filename[:-4] + '_residual_stats_pha.dat', 'w') as fid:
+            np.savetxt(fid, pha_res_stats)
+
+        # compute min/max/std
+        cc_pars_min = np.min(self.cc_pars, axis=0)
+        cc_pars_max = np.max(self.cc_pars, axis=0)
+        cc_pars_std = np.std(self.cc_pars, axis=0)
+        cc_pars_mean = np.mean(self.cc_pars, axis=0)
+        cc_pars_stats = np.vstack(
+            (cc_pars_min, cc_pars_max, cc_pars_mean, cc_pars_std)).T
+
+        with open(filename + '.min_max_std', 'w') as fid:
+            fid.write('# min max mean std\n')
+            np.savetxt(fid, cc_pars_stats)
+
+        # compute mean error
         self.cc_error_mean = np.zeros(self.errors.shape[1])
 
         for i in self.errors:
@@ -488,7 +522,7 @@ class cc_fit:
             print('There was an error saving mean Cole-Cole parameters ' +
                   'to the file: {0}'.format(filename))
 
-        print('MEAN ERROR', self.cc_error_mean)
+        # print('MEAN ERROR', self.cc_error_mean)
         try:
             np.savetxt(filename + '.err', self.cc_error_mean[np.newaxis, :],
                        fmt='%.5f')
