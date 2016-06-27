@@ -7,7 +7,7 @@ including multiple additive terms:
 
 ![](static/cc_equation.png)
 
-This resitivity formulation is based on Pelton et. al. 1978. The fit is
+This resistivity formulation is based on Pelton et. al. 1978. The fit is
 conducted using a non-linear least squares algorithm implemented in the scipy
 package (scipy.optimize.leastsq).
 
@@ -19,7 +19,7 @@ References:
 * Cole, K. and R. Cole (1941). Dispersion and absorption in dielectrics i.
   alternating current characteristics. Journal of Chemical Physics 9, 341–351.
 * Pelton, W., S. Ward, P. Hallof, W. Sill, and P. Nelson (1978). Mineral
-  discrimination and removal of inductive coupling with multifrequency ip.
+  discrimination and removal of inductive coupling with multifrequency IP.
   Geophysics 43 (3), 588–609.
 
 ![Example fit](static/spectrum_01.png)
