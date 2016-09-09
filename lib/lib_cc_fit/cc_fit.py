@@ -88,14 +88,14 @@ class cc_fit:
             tmp_data = np.delete(tmp_data, ignore_pha_ids, 1)
 
         if mags_are_in_log10 is True:
-            tmp_data[:, 0:tmp_data.shape[1] / 2] = 10 ** (
-                tmp_data[:, 0:tmp_data.shape[1] / 2])
+            tmp_data[:, 0:int(tmp_data.shape[1] / 2)] = 10 ** (
+                tmp_data[:, 0:(tmp_data.shape[1] / 2)])
 
         # we got linear data, we want log_e
         # todo: implement check
 
-        tmp_data[:, 0:tmp_data.shape[1] / 2] = np.log(
-            tmp_data[:, 0:tmp_data.shape[1] / 2])
+        tmp_data[:, 0:int(tmp_data.shape[1] / 2)] = np.log(
+            tmp_data[:, 0:int(tmp_data.shape[1] / 2)])
 
         self.data = tmp_data
 
@@ -248,7 +248,7 @@ class cc_fit:
 
     def _phase_rms(self, spectrum, forward):
         pha_rms = np.sqrt(
-            sum((spectrum[len(spectrum) / 2:len(spectrum)] -
+            sum((spectrum[int(len(spectrum) / 2):len(spectrum)] -
                  forward[1, :]) ** 2))
         pha_rms /= (len(spectrum) / 2)
         return pha_rms
@@ -265,10 +265,10 @@ class cc_fit:
 
         y_meas = np.hstack(
             (spectrum[0:nr_to_fit],
-             spectrum[len(spectrum) / 2:len(spectrum) / 2 + nr_to_fit]))
+             spectrum[int(len(spectrum) / 2):len(spectrum) / 2 + nr_to_fit]))
         x = np.hstack((self.fin[0:nr_to_fit],
-                       self.fin[len(self.fin) / 2:len(self.fin) /
-                                2 + nr_to_fit]))
+                       self.fin[int(len(self.fin) / 2):int(len(self.fin) /
+                                2) + nr_to_fit]))
 
         # the actual fitting routine
         plsq, cov, info, mesg, success = leastsq(
@@ -284,7 +284,7 @@ class cc_fit:
 
         # compute mag rms
         mag_rms = np.sqrt(
-            sum((spectrum[0:len(spectrum) / 2] - forward[0, :]) ** 2))
+            sum((spectrum[0:int(len(spectrum) / 2)] - forward[0, :]) ** 2))
         mag_rms /= (len(spectrum / 2))
 
         # compute pha rms
@@ -292,8 +292,8 @@ class cc_fit:
 
         # compute complex rms
         rms = np.sqrt(
-            sum((spectrum[0:len(spectrum) / 2] - forward[0, :]) ** 2) +
-            sum((spectrum[len(spectrum) / 2:len(spectrum)] -
+            sum((spectrum[0:int(len(spectrum) / 2)] - forward[0, :]) ** 2) +
+            sum((spectrum[int(len(spectrum) / 2):len(spectrum)] -
                  forward[1, :]) ** 2))
         rms /= len(spectrum)
 
@@ -403,8 +403,9 @@ class cc_fit:
 
         try:
             erg = colecole.cole_log(x, p)
-        except:
-            raise('error')
+        except Exception as e:
+            print('error', e)
+            return 10e10
 
         erg1 = np.hstack((erg[0, :], erg[1, :]))
         err = y - erg1
@@ -597,7 +598,7 @@ class cc_fit:
                     label='fit response')
 
         ax.semilogx(self.frequencies,
-                    (np.exp(self.data[id, 0: len(self.data[id, :]) / 2])),
+                    (np.exp(self.data[id, 0: int(len(self.data[id, :]) / 2)])),
                     'r.', linewidth=2.0,
                     label='data')
         ax.set_title('magnitude RMS: {0:.3e}'.format(self.magnitude_rms[id]))
@@ -609,7 +610,7 @@ class cc_fit:
         ax.semilogx(f_e, -forward[1, :], 'g-', linewidth=2.0,
                     label='fit response')
         ax.semilogx(self.frequencies,
-                    -self.data[id, len(self.data[id, :]) / 2:],
+                    -self.data[id, int(len(self.data[id, :]) / 2):],
                     'r.', linewidth=2.0,
                     label='data')
 
@@ -636,7 +637,7 @@ class cc_fit:
         # plot phase residuals
         ax = axes[2]
         pha_residuals = np.abs(forward_orig_f[1, :] -
-                               self.data[id, len(self.data[id, :]) / 2:])
+                               self.data[id, int(len(self.data[id, :]) / 2):])
         ax.semilogx(self.frequencies, pha_residuals, '-')
         ax.set_xlabel('frequency [Hz]')
         ax.set_ylabel(r'abs ($\phi_{inv} - \phi_{ori}$)')

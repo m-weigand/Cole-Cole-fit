@@ -25,4 +25,5 @@ if __name__ == '__main__':
           packages=['lib_cc_fit', ],
           scripts=['src/cc_fit.py', ],
           install_requires=['numpy', 'scipy', 'matplotlib'],
+          use_2to3=True,
           )
