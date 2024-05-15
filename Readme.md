@@ -1,6 +1,12 @@
 Cole-Cole fit
 =============
 
+> [!WARNING]
+> This here is old code that has not been used in many years. Expect things to break!
+> Try other codes:
+> * e.g.: https://github.com/clberube/BISIP
+> * also consider using some kind of Debye- or Cole-Cole decomposition: https://github.com/m-weigand/ccd_tools
+  
 This python package provides a command line interface to fit complex
 resistivity/resistance data using the Cole-Cole model (Cole and Cole, 1941),
 including multiple additive terms:
