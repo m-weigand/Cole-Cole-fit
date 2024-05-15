@@ -34,8 +34,8 @@ def cole_real(frequencies, params):
 
 
 def cole_complex(frequencies, params):
-     # determine number of Cole-Cole terms
-    nr_cc_terms = (len(params) - 1) / 3;
+    # determine number of Cole-Cole terms
+    nr_cc_terms = (len(params) - 1) / 3
 
     # extract the Cole-Cole parameters
     # DC resistance/resistivity
@@ -99,7 +99,7 @@ def cole_log(inputdata, params):
     c = params[3:len(params):3]; # cementation exponent
 
     # extract frequencies
-    f = inputdata[0:(len(inputdata) / 2)];
+    f = inputdata[0:int(len(inputdata) / 2)];
     # prepare temporary array which will store the values of all CC-terms,
     # which later will be summed up
     term = np.zeros((len(f), nr_cc_terms), dtype=np.complex128)

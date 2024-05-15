@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Execute to run double Cole-Cole term characterization
@@ -56,7 +56,7 @@ def _fit_spectra():
 if __name__ == '__main__':
     frequencies = _get_frequencies()
     for x in _generate_cc_sets():
-        print x
+        print(x)
     th._generate_spectra(frequencies, testdir, _generate_cc_sets)
     _fit_spectra()
     th._evaluate_fits(testdir)

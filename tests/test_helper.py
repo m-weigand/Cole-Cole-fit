@@ -44,7 +44,7 @@ def plot_residuals(directory):
         residual_file = directory + os.sep + 'results/residuals.dat'
         residuals.append(np.loadtxt(residual_file))
     all_residuals = np.array(residuals)
-    nr_f = all_residuals.shape[1] / 2
+    nr_f = int(all_residuals.shape[1] / 2)
     fig, axes = plt.subplots(1, 2, figsize=(6, 2.5))
 
     ax = axes[0]

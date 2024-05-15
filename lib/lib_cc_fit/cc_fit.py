@@ -20,11 +20,11 @@ Cole-Cole fit related functions
 import numpy as np
 import os
 import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pyplot as plt
-plt.ioff()
 from scipy.optimize import leastsq
 import lib_cc_fit.colecole as colecole
+mpl.use('Agg')
+plt.ioff()
 
 
 class cc_fit:
@@ -68,17 +68,17 @@ class cc_fit:
 
         # if we have only one spectrum to fit, correct the shape of the array
         datashape = tmp_data.shape
-        if(len(datashape) == 1):
+        if (len(datashape) == 1):
             tmp_data.shape = (1, datashape[0])
 
         # test if we got an id column, and delete if necessary
-        if((tmp_data.shape[1] % 2) == 1):
+        if ((tmp_data.shape[1] % 2) == 1):
             print('Found ID-column, deleting')
             tmp_data = np.delete(tmp_data, 0, 1)
 
         # if there is an ignore list, remove the correspoding entries from
         # magnitude and phase
-        if(ignore != []):
+        if (ignore != []):
             ignore_mag_ids = np.array(ignore, dtype=int)
             ignore_pha_ids = ignore_mag_ids + tmp_data.shape[1] / 2 - len(
                 ignore)
@@ -104,7 +104,7 @@ class cc_fit:
         Load frequencies from file.
         """
         self.frequencies = self.__load_file(filename)
-        if(ignore is not None):
+        if (ignore is not None):
             ignore_ids = np.array(ignore, dtype=int)
             self.frequencies = np.delete(self.frequencies, ignore_ids)
         self.fin = np.hstack((self.frequencies, self.frequencies))
@@ -137,7 +137,7 @@ class cc_fit:
             self.cc_pars = np.zeros((datasets, new_nr_of_pars))
             self.cc_pars_init = np.zeros((datasets, new_nr_of_pars))
 
-        if(self.errors is not None):
+        if (self.errors is not None):
             self.errors = np.resize(self.errors, (datasets, new_nr_of_pars))
         else:
             self.errors = np.zeros((datasets, new_nr_of_pars))
@@ -261,11 +261,19 @@ class cc_fit:
         Return the fit results, the magnitude and phase RMS, and the forward
         response of the fit parameters.
         """
-        nr_to_fit = len(spectrum) / 2
+        nr_to_fit = int(len(spectrum) / 2)
+        print('nr_to_fit:', nr_to_fit)
 
         y_meas = np.hstack(
-            (spectrum[0:nr_to_fit],
-             spectrum[int(len(spectrum) / 2):len(spectrum) / 2 + nr_to_fit]))
+            (
+                spectrum[0:nr_to_fit],
+                spectrum[
+                    int(len(spectrum) / 2):int(
+                        len(spectrum) / 2
+                    ) + nr_to_fit
+                ]
+            )
+        )
         x = np.hstack((self.fin[0:nr_to_fit],
                        self.fin[int(len(self.fin) / 2):int(len(self.fin) /
                                 2) + nr_to_fit]))
@@ -371,25 +379,25 @@ class cc_fit:
     def __Dres(self, p, y, x):
         err = 1
         # rho0
-        if(np.abs(np.exp(p[0]) - np.exp(y[0])) > 0.5):
+        if (np.abs(np.exp(p[0]) - np.exp(y[0])) > 0.5):
             err *= 1e10
 
         # m
-        if(p[1] < 0 or (len(p) > 4 and p[4] < 0)):
+        if (p[1] < 0 or (len(p) > 4 and p[4] < 0)):
             err *= 1e10
 
-        if(p[1] > 1 or (len(p) > 4 and p[4] > 1)):
+        if (p[1] > 1 or (len(p) > 4 and p[4] > 1)):
             err *= 1e10
 
         # tau
-        if(p[2] < -12):
+        if (p[2] < -12):
             err += 1e10
         # c
-        if(p[3] < 0 or p[3] > 1):
+        if (p[3] < 0 or p[3] > 1):
             err *= 1e10
 
         # 2 CC terms and tau
-        if(len(p) > 4 and (p[6] < 0 or p[6] > 1)):
+        if (len(p) > 4 and (p[6] < 0 or p[6] > 1)):
             err *= 1e10
         ccJac = -colecole.cc_jac(x, p) * err
         return ccJac
@@ -411,7 +419,7 @@ class cc_fit:
         err = y - erg1
 
         # NaN check and set err to 1e10
-        if(np.isnan(err).any()):
+        if (np.isnan(err).any()):
             err *= 10e10
 
         # y holds the original data
@@ -450,21 +458,21 @@ class cc_fit:
 #           err *= 1e10
 
         # m
-        if(p[1] < 0 or (len(p) > 4 and p[4] < 0)):
+        if (p[1] < 0 or (len(p) > 4 and p[4] < 0)):
             err *= 1e10
 
-        if(p[1] > 1 or (len(p) > 4 and p[4] > 1)):
+        if (p[1] > 1 or (len(p) > 4 and p[4] > 1)):
             err *= 1e10
 
         # tau
-        if(p[2] < -12):
+        if (p[2] < -12):
             err += 1e10
         # c
-        if(p[3] < 0 or p[3] > 1):
+        if (p[3] < 0 or p[3] > 1):
             err *= 1e10
 
         # 2 CC terms and tau
-        if(len(p) > 4 and (p[6] < 0 or p[6] > 1)):
+        if (len(p) > 4 and (p[6] < 0 or p[6] > 1)):
             err *= 1e10
 
         return err
@@ -519,7 +527,7 @@ class cc_fit:
 
         try:
             np.savetxt(filename, self.cc_pars_mean, fmt='%.5f')
-        except:
+        except Exception:
             print('There was an error saving mean Cole-Cole parameters ' +
                   'to the file: {0}'.format(filename))
 
@@ -527,20 +535,20 @@ class cc_fit:
         try:
             np.savetxt(filename + '.err', self.cc_error_mean[np.newaxis, :],
                        fmt='%.5f')
-        except:
+        except Exception:
             print('There was an error saving mean Cole-Cole parameter ' +
                   'errors to the file: {0}'.format(filename + '.err'))
 
     def save_cc_pars(self, filename):
         try:
             np.savetxt(filename, self.cc_pars, fmt='%.5f')
-        except:
+        except Exception:
             pass
 
     def save_cc_errors(self, filename):
         try:
             np.savetxt(filename, self.errors, fmt='%.5f')
-        except:
+        except Exception:
             pass
 
     def save_non_essential_results(self, directory):
@@ -587,20 +595,26 @@ class cc_fit:
 
         # plot magnitude
         ax = axes[0]
-        ax.semilogx(f_e,
-                    (np.exp(forward_init[0, :])),
-                    'b-',
-                    linestyle='dashed',
-                    label='initial parameters')
-        ax.semilogx(f_e,
-                    (np.exp(forward[0, :])),
-                    'g-',
-                    label='fit response')
+        ax.semilogx(
+            f_e,
+            (np.exp(forward_init[0, :])),
+            'b',
+            linestyle='dashed',
+            label='initial parameters'
+        )
+        ax.semilogx(
+            f_e,
+            (np.exp(forward[0, :])),
+            'g-',
+            label='fit response'
+        )
 
-        ax.semilogx(self.frequencies,
-                    (np.exp(self.data[id, 0: int(len(self.data[id, :]) / 2)])),
-                    'r.', linewidth=2.0,
-                    label='data')
+        ax.semilogx(
+            self.frequencies,
+            (np.exp(self.data[id, 0: int(len(self.data[id, :]) / 2)])),
+            'r.', linewidth=2.0,
+            label='data'
+        )
         ax.set_title('magnitude RMS: {0:.3e}'.format(self.magnitude_rms[id]))
         ax.set_xlabel('frequency [Hz]')
         ax.set_ylabel(r'$|Z/\rho| [\Omega (m)]$')
@@ -614,19 +628,22 @@ class cc_fit:
                     'r.', linewidth=2.0,
                     label='data')
 
-        ax.semilogx(f_e,
-                    -forward_init[1, :],
-                    'b-', linestyle='dashed',
-                    label='initial model')
+        ax.semilogx(
+            f_e,
+            -forward_init[1, :],
+            'b', linestyle='dashed',
+            label='initial model'
+        )
         # plot single terms
         colors = ('k', 'gray')
         for nr, term in enumerate(forward_cc_terms):
-            ax.semilogx(f_e,
-                        -term[1, :],
-                        '-', color=colors[nr % 2],
-                        linestyle='dashed',
-                        label='term {0}'.format(nr + 1)
-                        )
+            ax.semilogx(
+                f_e,
+                -term[1, :],
+                color=colors[nr % 2],
+                linestyle='dashed',
+                label='term {0}'.format(nr + 1)
+            )
 
         ax.legend(loc="upper center", ncol=3, bbox_to_anchor=(0, 0, 1, 1),
                   bbox_transform=fig.transFigure)
@@ -649,7 +666,7 @@ class cc_fit:
             ax.yaxis.set_major_locator(mpl.ticker.MaxNLocator(5))
         fig.tight_layout()
         fig.subplots_adjust(top=0.8)
-        fig.savefig('{0}.png'.format(filename))
+        fig.savefig('{0}.jpg'.format(filename), dpi=300)
         plt.close(fig)
 
     def check_and_correct_cc_parameter_set(p0):
@@ -662,13 +679,13 @@ class cc_fit:
 
         # if the m values are not between 0 and 1, set them to 0.01
         for index in range(1, nr_cc_pars, 3):
-            if(p0[index] > 1 or p0[index] < 0):
+            if (p0[index] > 1 or p0[index] < 0):
                 p0[index] = 0.01
 
         # if the log(tau) values are not between -1e12 and 6, reset them
         counter = 0
         for index in range(2, nr_cc_pars, 3):
-            if(p0[index] > 6 or p0[index] < -12):
+            if (p0[index] > 6 or p0[index] < -12):
                 p0[index] = np.log(0.01 / 10 ** (counter))
             counter += 1
 
